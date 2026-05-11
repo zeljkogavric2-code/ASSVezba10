@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrderSystem.Orders
 {
-    public class OrderQueryService
+    public class OrderQueryService : IOrderQueryService
     {
         private readonly IOrderRepository _repo;
 

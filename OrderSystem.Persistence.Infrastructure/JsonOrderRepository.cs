@@ -12,6 +12,15 @@ namespace OrderSystem.Persistence.Infrastructure
     public class JsonOrderRepository : IOrderRepository
     {
         private readonly string _filePath = "orders.json";
+        public JsonOrderRepository(string filePath)
+        {
+            _filePath = filePath;
+        }
+
+        public JsonOrderRepository()
+            : this("orders.json")
+        {
+        }
 
         public List<Order> GetAll()
         {

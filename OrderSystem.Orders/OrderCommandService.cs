@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrderSystem.Orders
 {
-    public class OrderCommandService
+    public class OrderCommandService :IOrderCommandService
     {
         private readonly IOrderRepository _repo;
         private readonly IDateTimeProvider _time;

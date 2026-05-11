@@ -1,22 +1,16 @@
-
 using System.Windows;
 using OrderSystem.Orders;
 using OrderSystem.Persistence.Infrastructure;
 using OrderSystem.Notifications.Infrastructure;
 using OrderSystem.Shared.Infrastructure;
 using OrderSystem.Pricing;
-using OrderSystem.SharedKernel;
-using System.Collections.Generic;
-using System.Linq;
 using OrderSystem.Notifications.Application;
 
 namespace OrderSystem.UI
 {
     public partial class MainWindow : Window
     {
-        private readonly OrderQueryService _queryService;
-        private readonly OrderCommandService _commandService;
-        private List<OrderItem> items = new List<OrderItem>();
+        private readonly OrderViewModel _viewModel;
 
         public MainWindow()
         {
@@ -28,32 +22,30 @@ namespace OrderSystem.UI
             var id = new GuidGenerator();
             var pricing = new PricingService();
             var eventBus = new InMemoryEventBus();
-            _queryService = new OrderQueryService(repo);
-            _commandService = new OrderCommandService(repo, time, id, pricing,eventBus);
+
+            var queryService = new OrderQueryService(repo);
+            var commandService = new OrderCommandService(repo, time, id, pricing, eventBus);
 
             var handler = new NotificationHandler(eventBus, email);
 
-            lstOrders.ItemsSource = _queryService.GetAllOrders();
+            _viewModel = new OrderViewModel(queryService, commandService);
+
+            lstOrders.ItemsSource = _viewModel.Orders;
         }
 
         private void CreateOrder_Click(object sender, RoutedEventArgs e)
         {
-            _commandService.CreateOrder(txtCustomer.Text, items);            
+            _viewModel.CreateOrder(txtCustomer.Text);
 
-            items = new List<OrderItem>();
-            lstOrders.ItemsSource = _queryService.GetAllOrders();
+            lstOrders.ItemsSource = _viewModel.Orders;
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
-            var item = new OrderItem
-            {
-                Product = txtProduct.Text,
-                Price = decimal.Parse(txtPrice.Text),
-                Quantity = int.Parse(txtQty.Text)
-            };
-
-            items.Add(item);
+            _viewModel.AddItem(
+                txtProduct.Text,
+                txtPrice.Text,
+                txtQty.Text);
         }
     }
 }

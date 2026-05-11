@@ -8,7 +8,7 @@ using System;
 
 namespace OrderSystem.Orders
 {
-    public class OrderService
+    public class OrderService:IOrderService
     {
         private readonly IOrderRepository _repo;
         private readonly IDateTimeProvider _time;
