@@ -1,1 +1,1 @@
-Završena vežba 6 i vežba 7. Modularni monolit sa DI i EDA. 
+Završena vežba 9. Modularni monolit sa test projektom i Unit testovima Domain i Service. 
